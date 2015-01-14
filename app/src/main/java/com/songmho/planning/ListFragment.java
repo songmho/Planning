@@ -1,15 +1,15 @@
 package com.songmho.planning;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by songmho on 2015-01-03.
@@ -27,15 +27,33 @@ public class ListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LinearLayout cur_container=(LinearLayout)inflater.inflate(R.layout.fragment_list,container,false);
+        FrameLayout cur_container=(FrameLayout)inflater.inflate(R.layout.fragment_list,container,false);
 
         ListView list=(ListView)cur_container.findViewById(R.id.list);
+        ArrayList<Mainlistitem> items=new ArrayList<>();
+        MainListAdapter listAdapter;
+
         switch (cur_position){
             case 0:
+                Mainlistitem item1=new Mainlistitem("Title","duedate");
+
+                items.add(item1);
+                listAdapter=new MainListAdapter(getActivity(),items);
+                list.setAdapter(listAdapter);
                 break;
             case 1:
+                Mainlistitem item2=new Mainlistitem("Title","duedate");
+
+                items.add(item2);
+                listAdapter=new MainListAdapter(getActivity(),items);
+                list.setAdapter(listAdapter);
                 break;
             case 2:
+                Mainlistitem item3=new Mainlistitem("Title","duedate");
+
+                items.add(item3);
+                listAdapter=new MainListAdapter(getActivity(),items);
+                list.setAdapter(listAdapter);
                 break;
         }
         return cur_container;
