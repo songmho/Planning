@@ -1,12 +1,11 @@
 package com.songmho.planning;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -14,9 +13,9 @@ import java.util.ArrayList;
 /**
  * Created by songmho on 2015-01-03.
  */
-public class ListFragment extends Fragment {
+public class ListFragmentActivity extends Fragment {
     int cur_position;
-    public ListFragment(int position) {
+    public ListFragmentActivity(int position) {
         this.cur_position=position;
     }
 
@@ -26,36 +25,38 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FrameLayout cur_container=(FrameLayout)inflater.inflate(R.layout.fragment_list,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LinearLayout cur_container=(LinearLayout)inflater.inflate(R.layout.fragment_list,container,false);
 
         ListView list=(ListView)cur_container.findViewById(R.id.list);
         ArrayList<Mainlistitem> items=new ArrayList<>();
-        MainListAdapter listAdapter;
 
         switch (cur_position){
-            case 0:
+            case 0:                     //To Do list
                 Mainlistitem item1=new Mainlistitem("Title","duedate");
-
                 items.add(item1);
-                listAdapter=new MainListAdapter(getActivity(),items);
-                list.setAdapter(listAdapter);
+
+                make_list(list, items);
                 break;
-            case 1:
+            case 1:                     //Doing list
                 Mainlistitem item2=new Mainlistitem("Title","duedate");
-
                 items.add(item2);
-                listAdapter=new MainListAdapter(getActivity(),items);
-                list.setAdapter(listAdapter);
-                break;
-            case 2:
-                Mainlistitem item3=new Mainlistitem("Title","duedate");
 
+                make_list(list, items);
+                break;
+            case 2:                     //Done list
+                Mainlistitem item3=new Mainlistitem("Title","duedate");
                 items.add(item3);
-                listAdapter=new MainListAdapter(getActivity(),items);
-                list.setAdapter(listAdapter);
+
+                make_list(list, items);
                 break;
         }
         return cur_container;
+    }
+
+    private void make_list(ListView list, ArrayList<Mainlistitem> items) {      //ArrayList를 가지고 list를 만드는 메소드
+        MainListAdapter listAdapter;
+        listAdapter=new MainListAdapter(getActivity(),items);
+        list.setAdapter(listAdapter);
     }
 }

@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_selected="true"
-        android:drawable="@drawable/indicator_on"
+        android:drawable="@drawable/indi_on"
         />
     <item
-        android:drawable="@drawable/indicator_off"/>
+        android:drawable="@drawable/indi_off"/>
 </selector>
