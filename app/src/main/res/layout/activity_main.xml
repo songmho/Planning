@@ -6,7 +6,7 @@
         <!--indicator-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:orientation="horizontal"
             android:weightSum="3">
             <Button
@@ -16,7 +16,6 @@
                 android:layout_height="40dp"
                 android:background="@drawable/indicator"
                 android:text="To Do"/>
-
             <Button
                 android:id="@+id/doing"
                 android:layout_weight="1"
@@ -31,6 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:background="@drawable/indicator"
+                android:layout_marginRight="-3dp"
                 android:text="Done"/>
         </LinearLayout>
     <!--view pager-->

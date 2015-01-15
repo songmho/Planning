@@ -14,10 +14,6 @@ import java.util.ArrayList;
  * Created by songmho on 2015-01-03.
  */
 public class ListFragmentActivity extends Fragment {
-    int cur_position;
-    public ListFragmentActivity(int position) {
-        this.cur_position=position;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +26,7 @@ public class ListFragmentActivity extends Fragment {
 
         ListView list=(ListView)cur_container.findViewById(R.id.list);
         ArrayList<Mainlistitem> items=new ArrayList<>();
+        int cur_position=getArguments().getInt("max_page");
 
         switch (cur_position){
             case 0:                     //To Do list
