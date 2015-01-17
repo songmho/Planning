@@ -10,8 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 
 public class MainActivity extends ActionBarActivity {
     Button todo;
@@ -27,9 +25,9 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffFF7300));
         getSupportActionBar().setTitle("Planning");
 
-        main_viewPager=(ViewPager)findViewById(R.id.viewpager);
         int MAX_PAGE=3;             //viewpager 총 페이지 갯수
 
+        main_viewPager=(ViewPager)findViewById(R.id.viewpager);
         todo=(Button)findViewById(R.id.todo);
         doing=(Button)findViewById(R.id.doing);
         done=(Button)findViewById(R.id.done);
@@ -43,9 +41,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private void openAdd() {
-        Toast.makeText(getApplicationContext(),"Toast",Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(MainActivity.this,AddActivity.class));
+    private void openAdd() {                    //add액티비티 연결
+        startActivity(new Intent(MainActivity.this, AddActivity.class));
     }
 
     private class Viewpager_change implements ViewPager.OnPageChangeListener {

@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.ParseObject;
+
 /**
  * Created by songmho on 2015-01-15.
  */
@@ -25,6 +27,9 @@ public class AddActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),editText.getText(),Toast.LENGTH_SHORT).show();
+                ParseObject test=new ParseObject("test");
+                test.put("ttt",editText.getText());
+                test.saveInBackground();
             }
         });
     }
