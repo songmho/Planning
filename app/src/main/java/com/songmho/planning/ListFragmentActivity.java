@@ -38,13 +38,14 @@ public class ListFragmentActivity extends Fragment {
         switch (cur_position){
             case 0:                     //To Do list
                 final Mainlistitem[] item1 = new Mainlistitem[10];
-                ParseQuery<ParseObject> parseQuery=ParseQuery.getQuery("Test");
-                parseQuery.findInBackground(new FindCallback<ParseObject>() {
+                ParseQuery<ParseObject> query_todo=ParseQuery.getQuery("Test");
+                query_todo.whereContains("state", "todo");
+                query_todo.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         for (int i = 0; i < parseObjects.size(); i++) {
                             ParseObject parseObject = parseObjects.get(i);
-                            item1[i] = new Mainlistitem(parseObject.getString("ttt"), "duedate");
+                            item1[i] = new Mainlistitem(parseObject.getString("title"),parseObject.getString("duedate"));
                             items.add(item1[i]);
                         }
                         make_list(list, items);
@@ -53,16 +54,38 @@ public class ListFragmentActivity extends Fragment {
                     list.setOnItemClickListener(new listitemclick(cur_position));
                 break;
             case 1:                     //Doing list
-                Mainlistitem item2=new Mainlistitem("Title","duedate");
-                items.add(item2);
-
-                make_list(list, items);
+                final Mainlistitem[] item2 = new Mainlistitem[10];
+                ParseQuery<ParseObject> query_doing=ParseQuery.getQuery("Test");
+                query_doing.whereContains("state", "doing");
+                query_doing.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        for (int i = 0; i < parseObjects.size(); i++) {
+                            ParseObject parseObject = parseObjects.get(i);
+                            item2[i] = new Mainlistitem(parseObject.getString("title"), parseObject.getString("duedate"));
+                            items.add(item2[i]);
+                        }
+                        make_list(list, items);
+                    }
+                });
+                list.setOnItemClickListener(new listitemclick(cur_position));
                 break;
             case 2:                     //Done list
-                Mainlistitem item3=new Mainlistitem("Title","duedate");
-                items.add(item3);
-
-                make_list(list, items);
+                final Mainlistitem[] item3 = new Mainlistitem[10];
+                ParseQuery<ParseObject> query_done=ParseQuery.getQuery("Test");
+                query_done.whereContains("state", "done");
+                query_done.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                        for (int i = 0; i < parseObjects.size(); i++) {
+                            ParseObject parseObject = parseObjects.get(i);
+                            item3[i] = new Mainlistitem(parseObject.getString("title"), parseObject.getString("duedate"));
+                            items.add(item3[i]);
+                        }
+                        make_list(list, items);
+                    }
+                });
+                list.setOnItemClickListener(new listitemclick(cur_position));
                 break;
         }
         return cur_container;
@@ -84,7 +107,8 @@ public class ListFragmentActivity extends Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (cur_position){
                 case 0:
-                    Intent intent=new Intent(getActivity(),MainActivity.class);
+                    Intent intent=new Intent(getActivity(),DetailActivity.class);
+                    intent.putExtra("title",String.valueOf(parent.getItemAtPosition(position)));
                     startActivity(intent);
                     break;
                 case 1:

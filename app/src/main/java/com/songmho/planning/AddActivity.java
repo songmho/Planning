@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.parse.ParseObject;
 
@@ -20,15 +19,17 @@ public class AddActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add);
 
-        final EditText editText=(EditText)findViewById(R.id.edittext);
+        final EditText edit_title=(EditText)findViewById(R.id.edit_title);
+        final EditText edit_duedate=(EditText)findViewById(R.id.edit_duedate);
         Button button=(Button)findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),editText.getText(),Toast.LENGTH_SHORT).show();
-                ParseObject test=new ParseObject("test");
-                test.put("ttt",editText.getText());
+                ParseObject test=new ParseObject("Test");
+                test.put("title",String.valueOf(edit_title.getText()));
+                test.put("duedate",String.valueOf(edit_duedate.getText()));
+                test.put("state","todo");
                 test.saveInBackground();
             }
         });

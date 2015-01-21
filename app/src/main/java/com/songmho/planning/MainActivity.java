@@ -42,7 +42,9 @@ public class MainActivity extends ActionBarActivity {
 
 
     private void openAdd() {                    //add액티비티 연결
-        startActivity(new Intent(MainActivity.this, AddActivity.class));
+        Intent goAddAct=new Intent(MainActivity.this,AddActivity.class);
+        goAddAct.putExtra("cur_act", "main");
+        startActivity(goAddAct);
     }
 
     private class Viewpager_change implements ViewPager.OnPageChangeListener {
