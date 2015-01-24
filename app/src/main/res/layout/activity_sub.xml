@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#ff7300"
+        android:orientation="vertical"
+        android:padding="15dp">
+        <TextView
+            android:id="@+id/duedate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:textColor="#ffffff"/>
+        <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/radio_todo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To do"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginRight="20dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_doing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doing"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:layout_marginRight="20dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done"
+                android:textSize="20dp"
+                android:textColor="#ffffff"/>
+        </RadioGroup>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <Button
+            android:id="@+id/todo"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/indicator"
+            android:text="To Do"/>
+        <Button
+            android:id="@+id/doing"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/indicator"
+            android:text="Doing"/>
+
+        <Button
+            android:id="@+id/done"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/indicator"
+            android:layout_marginRight="-3dp"
+            android:text="Done"/>
+    </LinearLayout>
+    <!--view pager-->
+    <android.support.v4.view.ViewPager
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/viewpager"/>
+</LinearLayout>

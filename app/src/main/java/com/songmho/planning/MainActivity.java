@@ -36,45 +36,17 @@ public class MainActivity extends ActionBarActivity {
         doing.setOnClickListener(new Button_click());
         done.setOnClickListener(new Button_click());
 
-        main_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE));     //Adapter연결
-        main_viewPager.setOnPageChangeListener(new Viewpager_change());
+        main_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"main"));     //Adapter연결
+        main_viewPager.setOnPageChangeListener(new Viewpager_change(todo,doing,done));
     }
 
 
     private void openAdd() {                    //add액티비티 연결
         Intent goAddAct=new Intent(MainActivity.this,AddActivity.class);
-        goAddAct.putExtra("cur_act", "main");
+        goAddAct.putExtra("cur_board", "main");
         startActivity(goAddAct);
     }
 
-    private class Viewpager_change implements ViewPager.OnPageChangeListener {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            switch (position){
-                case 0:                         //To do Fragment
-                    todo.setSelected(true);
-                    doing.setSelected(false);
-                    done.setSelected(false);
-                    break;
-                case 1:                         //Doing Fragment
-                    todo.setSelected(false);
-                    doing.setSelected(true);
-                    done.setSelected(false);
-                    break;
-                case 2:                        //Done Fragment
-                    todo.setSelected(false);
-                    doing.setSelected(false);
-                    done.setSelected(true);
-                    break;
-            }
-        }
-
-        @Override
-        public void onPageSelected(int position) {}
-
-        @Override
-        public void onPageScrollStateChanged(int state) {}
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

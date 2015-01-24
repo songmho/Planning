@@ -28,9 +28,22 @@
         <activity android:name=".AddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Dialog"/>
+
+        <activity android:name=".SubActivity"
+            android:screenOrientation="portrait"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"
+                />
+        </activity>
         <activity android:name=".DetailActivity"
             android:screenOrientation="portrait"
-            />
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SubActivity"/>
+            </activity>
     </application>
 
 </manifest>

@@ -10,15 +10,28 @@ import android.support.v4.app.FragmentPagerAdapter;
 */
 public class Viewpager_Adapter extends FragmentPagerAdapter {
     int PAGE;
-    public Viewpager_Adapter(FragmentManager supportFragmentManager, int MAX_PAGE) {
+    String cur_bor;
+    String main_title;
+    public Viewpager_Adapter(FragmentManager supportFragmentManager, int MAX_PAGE, String cur_bor) {
         super(supportFragmentManager);
         this.PAGE=MAX_PAGE;
+        this.cur_bor=cur_bor;
+    }
+
+    public Viewpager_Adapter(FragmentManager supportFragmentManager, int max_page, String sub, String main_title) {
+        super(supportFragmentManager);
+        this.PAGE=max_page;
+        this.cur_bor=sub;
+        this.main_title=main_title;
     }
 
     @Override
     public Fragment getItem(int position) {
         Bundle bundle=new Bundle();
         bundle.putInt("max_page",position);
+        bundle.putString("cur_bor",cur_bor);
+        if(cur_bor.equals("sub"))
+            bundle.putString("par_board",main_title);
         ListFragmentActivity listFragmentActivity=new ListFragmentActivity();
         listFragmentActivity.setArguments(bundle);
         return listFragmentActivity;}

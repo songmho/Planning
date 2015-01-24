@@ -21,7 +21,7 @@ import java.util.List;
  * Created by songmho on 2015-01-03.
  */
 public class ListFragmentActivity extends Fragment {
-
+    String cur_bor;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +34,17 @@ public class ListFragmentActivity extends Fragment {
         final ListView list=(ListView)cur_container.findViewById(R.id.list);
         final ArrayList<Mainlistitem> items=new ArrayList<>();
         int cur_position=getArguments().getInt("max_page");
-
+        cur_bor=getArguments().getString("cur_bor");
         switch (cur_position){
             case 0:                     //To Do list
                 final Mainlistitem[] item1 = new Mainlistitem[10];
                 ParseQuery<ParseObject> query_todo=ParseQuery.getQuery("Test");
+                if(cur_bor.equals("main"))
+                    query_todo.whereContains("board","main");
+                else if(cur_bor.equals("sub")) {
+                    query_todo.whereContains("par_board",getArguments().getString("par_board"));
+                    query_todo.whereContains("board", "sub");
+                }
                 query_todo.whereContains("state", "todo");
                 query_todo.findInBackground(new FindCallback<ParseObject>() {
                     @Override
@@ -56,6 +62,12 @@ public class ListFragmentActivity extends Fragment {
             case 1:                     //Doing list
                 final Mainlistitem[] item2 = new Mainlistitem[10];
                 ParseQuery<ParseObject> query_doing=ParseQuery.getQuery("Test");
+                if(cur_bor.equals("main"))
+                    query_doing.whereContains("board","main");
+                else if(cur_bor.equals("sub")) {
+                    query_doing.whereContains("par_board",getArguments().getString("par_board"));
+                    query_doing.whereContains("board", "sub");
+                }
                 query_doing.whereContains("state", "doing");
                 query_doing.findInBackground(new FindCallback<ParseObject>() {
                     @Override
@@ -73,6 +85,12 @@ public class ListFragmentActivity extends Fragment {
             case 2:                     //Done list
                 final Mainlistitem[] item3 = new Mainlistitem[10];
                 ParseQuery<ParseObject> query_done=ParseQuery.getQuery("Test");
+                if(cur_bor.equals("main"))
+                    query_done.whereContains("board","main");
+                else if(cur_bor.equals("sub")) {
+                    query_done.whereContains("par_board",getArguments().getString("par_board"));
+                    query_done.whereContains("board", "sub");
+                }
                 query_done.whereContains("state", "done");
                 query_done.findInBackground(new FindCallback<ParseObject>() {
                     @Override
@@ -105,15 +123,25 @@ public class ListFragmentActivity extends Fragment {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent;
+                intent=new Intent(getActivity(),SubActivity.class);
+            if(cur_bor.equals("sub"))
+                intent=new Intent(getActivity(),DetailActivity.class);
             switch (cur_position){
                 case 0:
-                    Intent intent=new Intent(getActivity(),DetailActivity.class);
                     intent.putExtra("title",String.valueOf(parent.getItemAtPosition(position)));
+                    intent.putExtra("state",0);
                     startActivity(intent);
                     break;
                 case 1:
+                    intent.putExtra("title",String.valueOf(parent.getItemAtPosition(position)));
+                    intent.putExtra("state",1);
+                    startActivity(intent);
                     break;
                 case 2:
+                    intent.putExtra("title",String.valueOf(parent.getItemAtPosition(position)));
+                    intent.putExtra("state",2);
+                    startActivity(intent);
                     break;
             }
         }
