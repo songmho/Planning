@@ -15,10 +15,10 @@ import java.util.ArrayList;
 public class MainListAdapter extends BaseAdapter{
 
     private LayoutInflater inflater;
-    private ArrayList<Mainlistitem> items;
+    private ArrayList<Listitem> items;
     private int layout=R.layout.list_item;
 
-    public MainListAdapter(Context context, ArrayList<Mainlistitem> items){
+    public MainListAdapter(Context context, ArrayList<Listitem> items){
         this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items=items;
     }
@@ -43,12 +43,12 @@ public class MainListAdapter extends BaseAdapter{
             convertView=inflater.inflate(layout,parent,false);
         }
 
-        Mainlistitem mainlistitem=items.get(position);
+        Listitem listitem =items.get(position);
 
         TextView title=(TextView)convertView.findViewById(R.id.title);
         TextView duedate=(TextView)convertView.findViewById(R.id.duedate);
-        title.setText(mainlistitem.getTitle());
-        duedate.setText(mainlistitem.getDuedate());
+        title.setText(listitem.getTitle());
+        duedate.setText(listitem.getDuedate());
         return convertView;
     }
 }

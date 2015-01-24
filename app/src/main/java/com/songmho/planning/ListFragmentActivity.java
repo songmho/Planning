@@ -32,12 +32,12 @@ public class ListFragmentActivity extends Fragment {
         LinearLayout cur_container=(LinearLayout)inflater.inflate(R.layout.fragment_list,container,false);
 
         final ListView list=(ListView)cur_container.findViewById(R.id.list);
-        final ArrayList<Mainlistitem> items=new ArrayList<>();
+        final ArrayList<Listitem> items=new ArrayList<>();
         int cur_position=getArguments().getInt("max_page");
         cur_bor=getArguments().getString("cur_bor");
         switch (cur_position){
             case 0:                     //To Do list
-                final Mainlistitem[] item1 = new Mainlistitem[10];
+                final Listitem[] item1 = new Listitem[10];
                 ParseQuery<ParseObject> query_todo=ParseQuery.getQuery("Test");
                 if(cur_bor.equals("main"))
                     query_todo.whereContains("board","main");
@@ -51,7 +51,7 @@ public class ListFragmentActivity extends Fragment {
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         for (int i = 0; i < parseObjects.size(); i++) {
                             ParseObject parseObject = parseObjects.get(i);
-                            item1[i] = new Mainlistitem(parseObject.getString("title"),parseObject.getString("duedate"));
+                            item1[i] = new Listitem(parseObject.getString("title"),parseObject.getString("duedate"));
                             items.add(item1[i]);
                         }
                         make_list(list, items);
@@ -60,7 +60,7 @@ public class ListFragmentActivity extends Fragment {
                     list.setOnItemClickListener(new listitemclick(cur_position));
                 break;
             case 1:                     //Doing list
-                final Mainlistitem[] item2 = new Mainlistitem[10];
+                final Listitem[] item2 = new Listitem[10];
                 ParseQuery<ParseObject> query_doing=ParseQuery.getQuery("Test");
                 if(cur_bor.equals("main"))
                     query_doing.whereContains("board","main");
@@ -74,7 +74,7 @@ public class ListFragmentActivity extends Fragment {
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         for (int i = 0; i < parseObjects.size(); i++) {
                             ParseObject parseObject = parseObjects.get(i);
-                            item2[i] = new Mainlistitem(parseObject.getString("title"), parseObject.getString("duedate"));
+                            item2[i] = new Listitem(parseObject.getString("title"), parseObject.getString("duedate"));
                             items.add(item2[i]);
                         }
                         make_list(list, items);
@@ -83,7 +83,7 @@ public class ListFragmentActivity extends Fragment {
                 list.setOnItemClickListener(new listitemclick(cur_position));
                 break;
             case 2:                     //Done list
-                final Mainlistitem[] item3 = new Mainlistitem[10];
+                final Listitem[] item3 = new Listitem[10];
                 ParseQuery<ParseObject> query_done=ParseQuery.getQuery("Test");
                 if(cur_bor.equals("main"))
                     query_done.whereContains("board","main");
@@ -97,7 +97,7 @@ public class ListFragmentActivity extends Fragment {
                     public void done(List<ParseObject> parseObjects, ParseException e) {
                         for (int i = 0; i < parseObjects.size(); i++) {
                             ParseObject parseObject = parseObjects.get(i);
-                            item3[i] = new Mainlistitem(parseObject.getString("title"), parseObject.getString("duedate"));
+                            item3[i] = new Listitem(parseObject.getString("title"), parseObject.getString("duedate"));
                             items.add(item3[i]);
                         }
                         make_list(list, items);
@@ -109,7 +109,7 @@ public class ListFragmentActivity extends Fragment {
         return cur_container;
     }
 
-    private void make_list(ListView list, ArrayList<Mainlistitem> items) {      //ArrayList를 가지고 list를 만드는 메소드
+    private void make_list(ListView list, ArrayList<Listitem> items) {      //ArrayList를 가지고 list를 만드는 메소드
         MainListAdapter listAdapter;
         listAdapter=new MainListAdapter(getActivity(),items);
         list.setAdapter(listAdapter);
