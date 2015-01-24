@@ -31,11 +31,11 @@ public class DetailActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(main_title);
 
         final TextView duedate=(TextView)findViewById(R.id.duedate);
-        RadioButton todo=(RadioButton)findViewById(R.id.todo);
-        RadioButton doing=(RadioButton)findViewById(R.id.doing);
-        RadioButton done=(RadioButton)findViewById(R.id.done);
+        RadioButton radio_todo=(RadioButton)findViewById(R.id.radio_todo);
+        RadioButton radio_doing=(RadioButton)findViewById(R.id.radio_doing);
+        RadioButton radio_done=(RadioButton)findViewById(R.id.radio_done);
 
-        find_state(intent,todo,doing,done);
+        find_state(intent,radio_todo,radio_doing,radio_done);
         ParseQuery<ParseObject> query= new ParseQuery<>("Test");
         query.whereContains("title",intent.getStringExtra("title"));
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -43,9 +43,12 @@ public class DetailActivity extends ActionBarActivity {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ParseObject object=parseObjects.get(0);
                 duedate.setText(object.getString("duedate"));
-
             }
         });
+
+        radio_todo.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub"));
+        radio_doing.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub"));
+        radio_done.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub"));
     }
 
     private void find_state(Intent intent_get, RadioButton radio_todo, RadioButton radio_doing, RadioButton radio_done) {

@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RadioButton
-                    android:id="@+id/todo"
+                    android:id="@+id/radio_todo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="To do"
@@ -28,7 +28,7 @@
                     android:layout_marginRight="20dp"/>
 
                 <RadioButton
-                    android:id="@+id/doing"
+                    android:id="@+id/radio_doing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Doing"
@@ -37,7 +37,7 @@
                     android:layout_marginRight="20dp"/>
 
                 <RadioButton
-                    android:id="@+id/done"
+                    android:id="@+id/radio_done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Done"

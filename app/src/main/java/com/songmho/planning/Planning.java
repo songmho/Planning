@@ -17,6 +17,7 @@ public class Planning extends Application {
         Parse.initialize(this,APPLICATION_ID,CLIENT_KEY);
         ParseACL defaultACL=new ParseACL();
         defaultACL.setPublicReadAccess(true);
+        defaultACL.setPublicWriteAccess(true);
         ParseACL.setDefaultACL(defaultACL,true);
     }
 }

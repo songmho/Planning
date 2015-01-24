@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -29,6 +27,7 @@ public class SubActivity extends ActionBarActivity {
 
     int MAX_PAGE=3;
     String main_title;
+    ViewPager sub_viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +51,7 @@ public class SubActivity extends ActionBarActivity {
         Button doing=(Button)findViewById(R.id.doing);
         Button done=(Button)findViewById(R.id.done);
 
-        ViewPager sub_viewPager=(ViewPager)findViewById(R.id.viewpager);
+        sub_viewPager=(ViewPager)findViewById(R.id.viewpager);
 
         find_state(intent_get, radio_todo, radio_doing, radio_done);
         sub_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"sub",main_title));
@@ -65,13 +64,16 @@ public class SubActivity extends ActionBarActivity {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ParseObject object=parseObjects.get(0);
                 duedate.setText(object.getString("duedate"));
-
             }
         });
 
-        radio_todo.setOnClickListener(new radioclick());
-        radio_doing.setOnClickListener(new radioclick());
-        radio_done.setOnClickListener(new radioclick());
+        radio_todo.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main"));
+        radio_doing.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main"));
+        radio_done.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main"));
+
+        todo.setOnClickListener(new Button_click());
+        doing.setOnClickListener(new Button_click());
+        done.setOnClickListener(new Button_click());
     }
 
     private void find_state(Intent intent_get, RadioButton radio_todo, RadioButton radio_doing, RadioButton radio_done) {
@@ -116,37 +118,20 @@ public class SubActivity extends ActionBarActivity {
         startActivity(goAddAct);
     }
 
-    private class radioclick implements View.OnClickListener {
+    private class Button_click implements View.OnClickListener {
         @Override
-        public void onClick(final View v) {
-            ParseQuery<ParseObject> query=new ParseQuery<>("Test");
-            query.whereContains("title",main_title);
-            query.whereContains("board","main");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> parseObjects, ParseException e) {
-                    ParseObject object=parseObjects.get(0);
-                    Log.d("fdfdfdf",object.getString("title"));
-                    object.remove("state");
-                    switch (v.getId()){
-                        case R.id.radio_todo:
-                            object.put("state", "todo");
-                            break;
-
-                        case R.id.radio_doing:
-                            object.put("state", "doing");
-                            break;
-
-                        case R.id.radio_done:
-                            object.put("state", "done");
-                            break;
-                    }
-                    object.saveInBackground();
-                    Log.d("ddfdf",object.getString("state"));
-                    Toast.makeText(getApplicationContext(),"현재 상태 : "+object.getString("state"),Toast.LENGTH_SHORT).show();
-                }
-            });
-
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.todo:
+                    sub_viewPager.setCurrentItem(0);
+                    break;
+                case R.id.doing:
+                    sub_viewPager.setCurrentItem(1);
+                    break;
+                case R.id.done:
+                    sub_viewPager.setCurrentItem(2);
+                    break;
+            }
         }
     }
 }
