@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Window;
 
 
 /**
@@ -27,7 +26,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 finishSplash();
-                startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                startActivity(new Intent(SplashActivity.this,LoginActivity.class));
             }
         },SPLASH_TIME);
     }

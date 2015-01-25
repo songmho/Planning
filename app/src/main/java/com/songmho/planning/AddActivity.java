@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 /**
  * Created by songmho on 2015-01-15.
@@ -33,6 +34,7 @@ public class AddActivity extends Activity {
                 test.put("title",String.valueOf(edit_title.getText()));
                 test.put("duedate",String.valueOf(edit_duedate.getText()));
                 test.put("board",String.valueOf(intent.getStringExtra("cur_board")));
+                test.put("username", ParseUser.getCurrentUser().getString("name"));
                 if(String.valueOf(intent.getStringExtra("cur_board")).equals("sub"))
                     test.put("par_board",intent.getStringExtra("title"));
                 test.put("state","todo");

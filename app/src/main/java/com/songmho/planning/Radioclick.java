@@ -1,7 +1,6 @@
 package com.songmho.planning;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -9,6 +8,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -29,6 +29,7 @@ public class Radioclick implements View.OnClickListener {
     public void onClick(final View v) {
         ParseQuery<ParseObject> query=new ParseQuery<>("Test");
         query.whereContains("title",main_title);
+        query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
         if(cur_board.equals("main"))
             query.whereContains("board","main");
         else if(cur_board.equals("sub"))

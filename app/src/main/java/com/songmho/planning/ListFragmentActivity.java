@@ -14,6 +14,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,11 @@ import java.util.List;
  */
 public class ListFragmentActivity extends Fragment {
     String cur_bor;
+    int cur_position;
+    Listitem[] item1;
+    ArrayList<Listitem> items;
+    ListView list;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,81 +38,13 @@ public class ListFragmentActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout cur_container=(LinearLayout)inflater.inflate(R.layout.fragment_list,container,false);
 
-        final ListView list=(ListView)cur_container.findViewById(R.id.list);
-        final ArrayList<Listitem> items=new ArrayList<>();
-        int cur_position=getArguments().getInt("max_page");
+        list=(ListView)cur_container.findViewById(R.id.list);
+        items=new ArrayList<>();
+        cur_position=getArguments().getInt("max_page");
         cur_bor=getArguments().getString("cur_bor");
-        switch (cur_position){
-            case 0:                     //To Do list
-                final Listitem[] item1 = new Listitem[10];
-                ParseQuery<ParseObject> query_todo=ParseQuery.getQuery("Test");
-                if(cur_bor.equals("main"))
-                    query_todo.whereContains("board","main");
-                else if(cur_bor.equals("sub")) {
-                    query_todo.whereContains("par_board",getArguments().getString("par_board"));
-                    query_todo.whereContains("board", "sub");
-                }
-                query_todo.whereContains("state", "todo");
-                query_todo.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> parseObjects, ParseException e) {
-                        for (int i = 0; i < parseObjects.size(); i++) {
-                            ParseObject parseObject = parseObjects.get(i);
-                            item1[i] = new Listitem(parseObject.getString("title"),parseObject.getString("duedate"));
-                            items.add(item1[i]);
-                        }
-                        make_list(list, items);
-                    }
-                });
-                    list.setOnItemClickListener(new listitemclick(cur_position));
-                break;
-            case 1:                     //Doing list
-                final Listitem[] item2 = new Listitem[10];
-                ParseQuery<ParseObject> query_doing=ParseQuery.getQuery("Test");
-                if(cur_bor.equals("main"))
-                    query_doing.whereContains("board","main");
-                else if(cur_bor.equals("sub")) {
-                    query_doing.whereContains("par_board",getArguments().getString("par_board"));
-                    query_doing.whereContains("board", "sub");
-                }
-                query_doing.whereContains("state", "doing");
-                query_doing.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> parseObjects, ParseException e) {
-                        for (int i = 0; i < parseObjects.size(); i++) {
-                            ParseObject parseObject = parseObjects.get(i);
-                            item2[i] = new Listitem(parseObject.getString("title"), parseObject.getString("duedate"));
-                            items.add(item2[i]);
-                        }
-                        make_list(list, items);
-                    }
-                });
-                list.setOnItemClickListener(new listitemclick(cur_position));
-                break;
-            case 2:                     //Done list
-                final Listitem[] item3 = new Listitem[10];
-                ParseQuery<ParseObject> query_done=ParseQuery.getQuery("Test");
-                if(cur_bor.equals("main"))
-                    query_done.whereContains("board","main");
-                else if(cur_bor.equals("sub")) {
-                    query_done.whereContains("par_board",getArguments().getString("par_board"));
-                    query_done.whereContains("board", "sub");
-                }
-                query_done.whereContains("state", "done");
-                query_done.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> parseObjects, ParseException e) {
-                        for (int i = 0; i < parseObjects.size(); i++) {
-                            ParseObject parseObject = parseObjects.get(i);
-                            item3[i] = new Listitem(parseObject.getString("title"), parseObject.getString("duedate"));
-                            items.add(item3[i]);
-                        }
-                        make_list(list, items);
-                    }
-                });
-                list.setOnItemClickListener(new listitemclick(cur_position));
-                break;
-        }
+        item1 = new Listitem[10];
+
+            list.setOnItemClickListener(new listitemclick(cur_position));
         return cur_container;
     }
 
@@ -145,5 +84,43 @@ public class ListFragmentActivity extends Fragment {
                     break;
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        items.clear();
+        ParseQuery<ParseObject> query=ParseQuery.getQuery("Test");
+        query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
+        if(cur_bor.equals("main"))
+            query.whereContains("board","main");
+        else if(cur_bor.equals("sub")) {
+            query.whereContains("par_board",getArguments().getString("par_board"));
+            query.whereContains("board", "sub");
+        }
+        switch(cur_position){
+            case 0:
+                query.whereContains("state", "todo");
+                break;
+            case 1:
+                query.whereContains("state", "doing");
+                break;
+            case 2:
+                query.whereContains("state", "done");
+                break;
+        }
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(parseObjects==null)
+                    return;
+                for (int i = 0; i < parseObjects.size(); i++) {
+                    ParseObject parseObject = parseObjects.get(i);
+                    item1[i] = new Listitem(parseObject.getString("title"),parseObject.getString("duedate"));
+                    items.add(item1[i]);
+                }
+                    make_list(list, items);
+            }
+        });
     }
 }
