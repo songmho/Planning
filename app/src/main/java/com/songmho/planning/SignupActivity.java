@@ -1,6 +1,7 @@
 package com.songmho.planning;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -48,6 +49,11 @@ public class SignupActivity extends ActionBarActivity {
                     public void done(ParseException e) {
                         if(e==null) {
                             Toast.makeText(getApplicationContext(), "가입 되었습니다.", Toast.LENGTH_SHORT).show();
+                            SharedPreferences pref_login=getSharedPreferences("login_info",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=pref_login.edit();
+                            editor.putString("email",String.valueOf(email.getText()));
+                            editor.putString("password",String.valueOf(password.getText()));
+                            editor.commit();
                             startActivity(new Intent(SignupActivity.this, MainActivity.class));
                             finish();
                         }
