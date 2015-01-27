@@ -6,11 +6,11 @@ import android.widget.Button;
 /**
  * Created by songmho on 2015-01-24.
  */
-public class Viewpager_change implements ViewPager.OnPageChangeListener {
+public class Viewpager_indicator implements ViewPager.OnPageChangeListener {
     Button todo;
     Button doing;
     Button done;
-    public Viewpager_change(Button todo, Button doing, Button done) {
+    public Viewpager_indicator(Button todo, Button doing, Button done) {
         this.todo=todo;
         this.doing=doing;
         this.done=done;

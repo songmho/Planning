@@ -1,6 +1,7 @@
 package com.songmho.planning;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,15 +20,17 @@ public class Radioclick implements View.OnClickListener {
     String main_title;
     Context context;
     String cur_board;
-    public Radioclick(String main_title, Context applicationContext, String cur_board) {
+    String classname;
+    public Radioclick(String main_title, Context applicationContext, String cur_board, String classname) {
         this.main_title=main_title;
         this.context=applicationContext;
         this.cur_board=cur_board;
+        this.classname=classname;
     }
 
     @Override
     public void onClick(final View v) {
-        ParseQuery<ParseObject> query=new ParseQuery<>("Test");
+        ParseQuery<ParseObject> query= new ParseQuery<>(classname);
         query.whereContains("title",main_title);
         query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
         if(cur_board.equals("main"))

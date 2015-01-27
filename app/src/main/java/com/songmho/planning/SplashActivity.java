@@ -38,23 +38,26 @@ public class SplashActivity extends Activity {
 
     private void login() {
         SharedPreferences pref_login=getSharedPreferences("login_info",MODE_PRIVATE);
-        if(pref_login!=null) {
             String email = pref_login.getString("email", "");
             String password = pref_login.getString("password", "");
             ParseUser.logInInBackground(email,password,new LogInCallback() {
                 @Override
                 public void done(ParseUser parseUser, ParseException e) {
-                    finishSplash();
-                    startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                    finish();
+                    if(parseUser!=null) {
+                        finishSplash();
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        finish();
+                    }
+
+                    else {
+                        finishSplash();
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
             });
-        }
-        else{
-            finishSplash();
-            startActivity(new Intent(SplashActivity.this,LoginActivity.class));
-            finish();
-        }
+
+
     }
 
     private void finishSplash() {

@@ -1,6 +1,8 @@
 package com.songmho.planning;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,10 +30,13 @@ public class ListFragmentActivity extends Fragment {
     Listitem[] item1;
     ArrayList<Listitem> items;
     ListView list;
+    String classname;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences pref_login=getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        classname=pref_login.getString("classname","");
     }
 
     @Override
@@ -43,8 +48,8 @@ public class ListFragmentActivity extends Fragment {
         cur_position=getArguments().getInt("max_page");
         cur_bor=getArguments().getString("cur_bor");
         item1 = new Listitem[10];
+        list.setOnItemClickListener(new listitemclick(cur_position));
 
-            list.setOnItemClickListener(new listitemclick(cur_position));
         return cur_container;
     }
 
@@ -90,7 +95,7 @@ public class ListFragmentActivity extends Fragment {
     public void onResume() {
         super.onResume();
         items.clear();
-        ParseQuery<ParseObject> query=ParseQuery.getQuery("Test");
+        ParseQuery<ParseObject> query=ParseQuery.getQuery(classname);
         query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
         if(cur_bor.equals("main"))
             query.whereContains("board","main");

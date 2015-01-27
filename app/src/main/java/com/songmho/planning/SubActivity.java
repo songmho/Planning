@@ -1,6 +1,8 @@
 package com.songmho.planning;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -55,9 +57,10 @@ public class SubActivity extends ActionBarActivity {
 
         find_state(intent_get, radio_todo, radio_doing, radio_done);
         sub_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"sub",main_title));
-        sub_viewPager.setOnPageChangeListener(new Viewpager_change(todo,doing,done));
+        sub_viewPager.setOnPageChangeListener(new Viewpager_indicator(todo,doing,done));
 
-        ParseQuery<ParseObject> query= new ParseQuery<>("Test");
+        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        ParseQuery<ParseObject> query= new ParseQuery<>(pref_login.getString("classname",""));
         query.whereContains("title",intent_get.getStringExtra("title"));
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -67,9 +70,9 @@ public class SubActivity extends ActionBarActivity {
             }
         });
 
-        radio_todo.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main"));
-        radio_doing.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main"));
-        radio_done.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main"));
+        radio_todo.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main",(pref_login.getString("classname",""))));
+        radio_doing.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", (pref_login.getString("classname", ""))));
+        radio_done.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", (pref_login.getString("classname", ""))));
 
         todo.setOnClickListener(new Button_click());
         doing.setOnClickListener(new Button_click());
@@ -112,10 +115,12 @@ public class SubActivity extends ActionBarActivity {
     }
 
     private void openAdd() {
-        Intent goAddAct=new Intent(SubActivity.this,AddActivity.class);
-        goAddAct.putExtra("cur_board", "sub");
-        goAddAct.putExtra("title",main_title);
-        startActivity(goAddAct);
+        Bundle bundle=new Bundle();
+        bundle.putString("board","sub");
+        bundle.putString("main_title",main_title);
+        AddActivity addActivity=new AddActivity();
+        addActivity.setArguments(bundle);
+        addActivity.show(getFragmentManager(),"tag");
     }
 
     private class Button_click implements View.OnClickListener {

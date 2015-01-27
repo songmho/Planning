@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -36,9 +38,10 @@ public class SignupActivity extends ActionBarActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String email_str= String.valueOf(email.getText());
                 ParseUser user=new ParseUser();
-                user.setUsername(String.valueOf(email.getText()));
-                user.setEmail(String.valueOf(email.getText()));
+                user.setUsername(email_str);
+                user.setEmail(email_str);
                 user.put("name",String.valueOf(name.getText()));
                 if(String.valueOf(password.getText()).equals(String.valueOf(pass_check.getText())))
                     user.setPassword(String.valueOf(password.getText()));
@@ -49,11 +52,15 @@ public class SignupActivity extends ActionBarActivity {
                     public void done(ParseException e) {
                         if(e==null) {
                             Toast.makeText(getApplicationContext(), "가입 되었습니다.", Toast.LENGTH_SHORT).show();
+                            String [] result=email_str.split("\\@");
+                            ParseObject object=ParseObject.create(result[0]);
                             SharedPreferences pref_login=getSharedPreferences("login_info",MODE_PRIVATE);
                             SharedPreferences.Editor editor=pref_login.edit();
-                            editor.putString("email",String.valueOf(email.getText()));
+                            editor.putString("email",email_str);
                             editor.putString("password",String.valueOf(password.getText()));
+                            editor.putString("classname",result[0]);
                             editor.commit();
+                            object.saveInBackground();
                             startActivity(new Intent(SignupActivity.this, MainActivity.class));
                             finish();
                         }

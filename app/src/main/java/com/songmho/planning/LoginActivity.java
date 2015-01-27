@@ -2,6 +2,7 @@ package com.songmho.planning;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,13 @@ public class LoginActivity extends Activity {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
                             if(parseUser!=null){
+                                SharedPreferences pref_login=getSharedPreferences("login_info",MODE_PRIVATE);
+                                SharedPreferences.Editor editor=pref_login.edit();
+                                editor.putString("email",String.valueOf(email.getText()));
+                                editor.putString("password",String.valueOf(password.getText()));
+                                String [] result=String.valueOf(email.getText()).split("\\@");
+                                editor.putString("classname",result[0]);
+                                editor.commit();
                                 Toast.makeText(getApplicationContext(),"로그인 되었습니다.",Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
@@ -55,6 +63,7 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 Intent intent=new Intent(LoginActivity.this,SignupActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

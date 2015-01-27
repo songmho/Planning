@@ -1,6 +1,8 @@
 package com.songmho.planning;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -36,7 +38,8 @@ public class DetailActivity extends ActionBarActivity {
         RadioButton radio_done=(RadioButton)findViewById(R.id.radio_done);
 
         find_state(intent,radio_todo,radio_doing,radio_done);
-        ParseQuery<ParseObject> query= new ParseQuery<>("Test");
+        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        ParseQuery<ParseObject> query= new ParseQuery<>(pref_login.getString("classname",""));
         query.whereContains("title",intent.getStringExtra("title"));
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -46,9 +49,9 @@ public class DetailActivity extends ActionBarActivity {
             }
         });
 
-        radio_todo.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub"));
-        radio_doing.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub"));
-        radio_done.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub"));
+        radio_todo.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", (pref_login.getString("classname", ""))));
+        radio_doing.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", (pref_login.getString("classname", ""))));
+        radio_done.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", (pref_login.getString("classname", ""))));
     }
 
     private void find_state(Intent intent_get, RadioButton radio_todo, RadioButton radio_doing, RadioButton radio_done) {
