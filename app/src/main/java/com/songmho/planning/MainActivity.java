@@ -1,6 +1,8 @@
 package com.songmho.planning;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +28,9 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffFF7300));
         getSupportActionBar().setTitle("Planning");
 
+        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        String classname=pref_login.getString("classname","");
+
         int MAX_PAGE=3;             //viewpager 총 페이지 갯수
         context=getApplicationContext();
         main_viewPager=(ViewPager)findViewById(R.id.viewpager);
@@ -37,18 +42,15 @@ public class MainActivity extends ActionBarActivity {
         doing.setOnClickListener(new Button_click());
         done.setOnClickListener(new Button_click());
 
-        main_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"main"));     //Adapter연결
+        main_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"main",classname));     //Adapter연결
         main_viewPager.setOnPageChangeListener(new Viewpager_indicator(todo,doing,done));
     }
 
 
     private void openAdd() {                    //add액티비티 연결
-        Bundle bundle=new Bundle();
-        bundle.putString("board","main");
-        bundle.putString("main_title","");
-        AddActivity addActivity=new AddActivity();
-        addActivity.setArguments(bundle);
-        addActivity.show(getFragmentManager(),"tag");
+        Intent intent=new Intent(MainActivity.this, AddActivity.class);
+        intent.putExtra("board","main");
+        startActivity(intent);
     }
 
 

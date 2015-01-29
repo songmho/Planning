@@ -1,8 +1,6 @@
 package com.songmho.planning;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -31,12 +29,10 @@ public class ListFragmentActivity extends Fragment {
     ArrayList<Listitem> items;
     ListView list;
     String classname;
-
+    ListAdapter listAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences pref_login=getActivity().getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        classname=pref_login.getString("classname","");
     }
 
     @Override
@@ -47,15 +43,15 @@ public class ListFragmentActivity extends Fragment {
         items=new ArrayList<>();
         cur_position=getArguments().getInt("max_page");
         cur_bor=getArguments().getString("cur_bor");
-        item1 = new Listitem[10];
+        classname=getArguments().getString("classname");
+        item1 = new Listitem[100];
         list.setOnItemClickListener(new listitemclick(cur_position));
 
         return cur_container;
     }
 
     private void make_list(ListView list, ArrayList<Listitem> items) {      //ArrayList를 가지고 list를 만드는 메소드
-        MainListAdapter listAdapter;
-        listAdapter=new MainListAdapter(getActivity(),items);
+        listAdapter=new ListAdapter(getActivity(),items);
         list.setAdapter(listAdapter);
     }
 
@@ -94,13 +90,14 @@ public class ListFragmentActivity extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if(items!=null)
         items.clear();
         ParseQuery<ParseObject> query=ParseQuery.getQuery(classname);
         query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
         if(cur_bor.equals("main"))
             query.whereContains("board","main");
         else if(cur_bor.equals("sub")) {
-            query.whereContains("par_board",getArguments().getString("par_board"));
+            query.whereContains("main_title",getArguments().getString("main_title"));
             query.whereContains("board", "sub");
         }
         switch(cur_position){
@@ -121,7 +118,7 @@ public class ListFragmentActivity extends Fragment {
                     return;
                 for (int i = 0; i < parseObjects.size(); i++) {
                     ParseObject parseObject = parseObjects.get(i);
-                    item1[i] = new Listitem(parseObject.getString("title"),parseObject.getString("duedate"));
+                    item1[i] = new Listitem(parseObject.getString("title"),parseObject.getString("duedate"),parseObject.getString("duetime"));
                     items.add(item1[i]);
                 }
                     make_list(list, items);

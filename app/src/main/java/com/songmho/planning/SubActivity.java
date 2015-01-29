@@ -42,6 +42,8 @@ public class SubActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(main_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        String classname=pref_login.getString("classname","");
 
         final TextView duedate=(TextView)findViewById(R.id.duedate);
 
@@ -56,11 +58,11 @@ public class SubActivity extends ActionBarActivity {
         sub_viewPager=(ViewPager)findViewById(R.id.viewpager);
 
         find_state(intent_get, radio_todo, radio_doing, radio_done);
-        sub_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"sub",main_title));
+        sub_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"sub",main_title,classname));
         sub_viewPager.setOnPageChangeListener(new Viewpager_indicator(todo,doing,done));
 
-        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        ParseQuery<ParseObject> query= new ParseQuery<>(pref_login.getString("classname",""));
+
+        ParseQuery<ParseObject> query= new ParseQuery<>(classname);
         query.whereContains("title",intent_get.getStringExtra("title"));
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -70,9 +72,9 @@ public class SubActivity extends ActionBarActivity {
             }
         });
 
-        radio_todo.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main",(pref_login.getString("classname",""))));
-        radio_doing.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", (pref_login.getString("classname", ""))));
-        radio_done.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", (pref_login.getString("classname", ""))));
+        radio_todo.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main",classname));
+        radio_doing.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", classname));
+        radio_done.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", classname));
 
         todo.setOnClickListener(new Button_click());
         doing.setOnClickListener(new Button_click());
@@ -115,12 +117,10 @@ public class SubActivity extends ActionBarActivity {
     }
 
     private void openAdd() {
-        Bundle bundle=new Bundle();
-        bundle.putString("board","sub");
-        bundle.putString("main_title",main_title);
-        AddActivity addActivity=new AddActivity();
-        addActivity.setArguments(bundle);
-        addActivity.show(getFragmentManager(),"tag");
+        Intent intent=new Intent(SubActivity.this, AddActivity.class);
+        intent.putExtra("board","main");
+        intent.putExtra("main_title",main_title);
+        startActivity(intent);
     }
 
     private class Button_click implements View.OnClickListener {

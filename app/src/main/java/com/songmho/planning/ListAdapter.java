@@ -12,13 +12,13 @@ import java.util.ArrayList;
 /**
  * Created by songmho on 2015-01-13.
  */
-public class MainListAdapter extends BaseAdapter{
+public class ListAdapter extends BaseAdapter{
 
     private LayoutInflater inflater;
     private ArrayList<Listitem> items;
     private int layout=R.layout.list_item;
 
-    public MainListAdapter(Context context, ArrayList<Listitem> items){
+    public ListAdapter(Context context, ArrayList<Listitem> items){
         this.inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items=items;
     }
@@ -43,12 +43,17 @@ public class MainListAdapter extends BaseAdapter{
             convertView=inflater.inflate(layout,parent,false);
         }
 
+        notifyDataSetChanged();
         Listitem listitem =items.get(position);
 
         TextView title=(TextView)convertView.findViewById(R.id.title);
         TextView duedate=(TextView)convertView.findViewById(R.id.duedate);
+        TextView duetime=(TextView)convertView.findViewById(R.id.duetime);
+
         title.setText(listitem.getTitle());
         duedate.setText(listitem.getDuedate());
+        duetime.setText(listitem.getDuetime());
+
         return convertView;
     }
 }

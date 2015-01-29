@@ -6,9 +6,12 @@ package com.songmho.planning;
 public class Listitem {
     String title;
     String duedate;
-    public Listitem(String title, String duedate){
+    String duetime;
+
+    public Listitem(String title, String duedate,String duetime){
         this.title=title;
         this.duedate=duedate;
+        this.duetime=duetime;
     }
 
     public String getTitle(){
@@ -16,5 +19,8 @@ public class Listitem {
     }
     public String getDuedate(){
         return this.duedate;
+    }
+    public String getDuetime(){
+        return this.duetime;
     }
 }

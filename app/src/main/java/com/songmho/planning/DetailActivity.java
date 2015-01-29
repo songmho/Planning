@@ -32,14 +32,16 @@ public class DetailActivity extends ActionBarActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffFF7300));
         getSupportActionBar().setTitle(main_title);
 
+        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        String classname=pref_login.getString("classname","");
+
         final TextView duedate=(TextView)findViewById(R.id.duedate);
         RadioButton radio_todo=(RadioButton)findViewById(R.id.radio_todo);
         RadioButton radio_doing=(RadioButton)findViewById(R.id.radio_doing);
         RadioButton radio_done=(RadioButton)findViewById(R.id.radio_done);
 
         find_state(intent,radio_todo,radio_doing,radio_done);
-        SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        ParseQuery<ParseObject> query= new ParseQuery<>(pref_login.getString("classname",""));
+        ParseQuery<ParseObject> query= new ParseQuery<>(classname);
         query.whereContains("title",intent.getStringExtra("title"));
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -49,9 +51,9 @@ public class DetailActivity extends ActionBarActivity {
             }
         });
 
-        radio_todo.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", (pref_login.getString("classname", ""))));
-        radio_doing.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", (pref_login.getString("classname", ""))));
-        radio_done.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", (pref_login.getString("classname", ""))));
+        radio_todo.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", classname));
+        radio_doing.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", classname));
+        radio_done.setOnClickListener(new Radioclick(main_title, getApplicationContext(), "sub", classname));
     }
 
     private void find_state(Intent intent_get, RadioButton radio_todo, RadioButton radio_doing, RadioButton radio_done) {
