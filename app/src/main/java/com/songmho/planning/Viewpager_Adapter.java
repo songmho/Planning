@@ -30,15 +30,35 @@ public class Viewpager_Adapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        if(cur_bor.equals("main")){
         Bundle bundle=new Bundle();
         bundle.putInt("max_page",position);
         bundle.putString("cur_bor",cur_bor);
         bundle.putString("classname",classname);
-        if(cur_bor.equals("sub"))
-            bundle.putString("main_title",main_title);
         ListFragmentActivity listFragmentActivity=new ListFragmentActivity();
         listFragmentActivity.setArguments(bundle);
-        return listFragmentActivity;}
+        return listFragmentActivity;
+        }
+        else if(cur_bor.equals("sub")){
+            Bundle bundle=new Bundle();
+            if(position==0){
+                bundle.putString("title",main_title);
+                DetailfragmentActivity detailfragmentActivity =new DetailfragmentActivity();
+                detailfragmentActivity.setArguments(bundle);
+                return detailfragmentActivity;
+            }
+            else{
+                bundle.putInt("max_page",position-1);
+                bundle.putString("cur_bor", cur_bor);
+                bundle.putString("classname",classname);
+                bundle.putString("main_title",main_title);
+                ListFragmentActivity listFragmentActivity=new ListFragmentActivity();
+                listFragmentActivity.setArguments(bundle);
+                return listFragmentActivity;
+            }
+        }
+        return null;
+    }
 
     @Override
     public int getCount() {

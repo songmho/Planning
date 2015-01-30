@@ -12,24 +12,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.TextView;
-
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.List;
 
 /**
- * Created by songmho on 2015-01-22.
+ * Created by songmho on 2015-01-30.
  */
 public class SubActivity extends ActionBarActivity {
+    int MAX_PAGE=4;
 
-    int MAX_PAGE=3;
     String main_title;
+    String classname;
+
     ViewPager sub_viewPager;
+    Button info;
+    Button bt_todo;
+    Button bt_doing;
+    Button bt_done;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,56 +40,61 @@ public class SubActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        String classname=pref_login.getString("classname","");
+        classname=pref_login.getString("classname","");
 
-        final TextView duedate=(TextView)findViewById(R.id.duedate);
-
-        RadioButton radio_todo=(RadioButton)findViewById(R.id.radio_todo);
-        RadioButton radio_doing=(RadioButton)findViewById(R.id.radio_doing);
-        RadioButton radio_done=(RadioButton)findViewById(R.id.radio_done);
-
-        Button todo=(Button)findViewById(R.id.todo);
-        Button doing=(Button)findViewById(R.id.doing);
-        Button done=(Button)findViewById(R.id.done);
+        info=(Button)findViewById(R.id.info);
+        bt_todo=(Button)findViewById(R.id.todo);
+        bt_doing=(Button)findViewById(R.id.doing);
+        bt_done=(Button)findViewById(R.id.done);
 
         sub_viewPager=(ViewPager)findViewById(R.id.viewpager);
-
-        find_state(intent_get, radio_todo, radio_doing, radio_done);
         sub_viewPager.setAdapter(new Viewpager_Adapter(getSupportFragmentManager(),MAX_PAGE,"sub",main_title,classname));
-        sub_viewPager.setOnPageChangeListener(new Viewpager_indicator(todo,doing,done));
-
-
-        ParseQuery<ParseObject> query= new ParseQuery<>(classname);
-        query.whereContains("title",intent_get.getStringExtra("title"));
-        query.findInBackground(new FindCallback<ParseObject>() {
+        sub_viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                ParseObject object=parseObjects.get(0);
-                duedate.setText(object.getString("duedate"));
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                switch (position){
+                    case 0:
+                        info.setSelected(true);
+                        bt_todo.setSelected(false);
+                        bt_doing.setSelected(false);
+                        bt_done.setSelected(false);
+                        break;
+                    case 1:
+                        info.setSelected(false);
+                        bt_todo.setSelected(true);
+                        bt_doing.setSelected(false);
+                        bt_done.setSelected(false);
+                        break;
+                    case 2:
+                        info.setSelected(false);
+                        bt_todo.setSelected(false);
+                        bt_doing.setSelected(true);
+                        bt_done.setSelected(false);
+                        break;
+                    case 3:
+                        info.setSelected(false);
+                        bt_todo.setSelected(false);
+                        bt_doing.setSelected(false);
+                        bt_done.setSelected(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
-        radio_todo.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main",classname));
-        radio_doing.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", classname));
-        radio_done.setOnClickListener(new Radioclick(main_title,getApplicationContext(),"main", classname));
-
-        todo.setOnClickListener(new Button_click());
-        doing.setOnClickListener(new Button_click());
-        done.setOnClickListener(new Button_click());
-    }
-
-    private void find_state(Intent intent_get, RadioButton radio_todo, RadioButton radio_doing, RadioButton radio_done) {
-        switch (intent_get.getIntExtra("state",0)){
-            case 0:
-                radio_todo.setChecked(true);
-                break;
-            case 1:
-                radio_doing.setChecked(true);
-                break;
-            case 2:
-                radio_done.setChecked(true);
-                break;
-        }
+        info.setOnClickListener(new ButtonClick());
+        bt_todo.setOnClickListener(new ButtonClick());
+        bt_doing.setOnClickListener(new ButtonClick());
+        bt_done.setOnClickListener(new ButtonClick());
     }
 
     @Override
@@ -108,9 +110,11 @@ public class SubActivity extends ActionBarActivity {
             case R.id.action_add:
                 openAdd();
                 return true;
+
             case android.R.id.home:
                 this.finish();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -118,23 +122,26 @@ public class SubActivity extends ActionBarActivity {
 
     private void openAdd() {
         Intent intent=new Intent(SubActivity.this, AddActivity.class);
-        intent.putExtra("board","main");
+        intent.putExtra("board","sub");
         intent.putExtra("main_title",main_title);
         startActivity(intent);
     }
 
-    private class Button_click implements View.OnClickListener {
+    private class ButtonClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.todo:
+                case R.id.info:
                     sub_viewPager.setCurrentItem(0);
                     break;
-                case R.id.doing:
+                case R.id.todo:
                     sub_viewPager.setCurrentItem(1);
                     break;
-                case R.id.done:
+                case R.id.doing:
                     sub_viewPager.setCurrentItem(2);
+                    break;
+                case R.id.done:
+                    sub_viewPager.setCurrentItem(3);
                     break;
             }
         }

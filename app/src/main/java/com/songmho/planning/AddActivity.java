@@ -102,7 +102,7 @@ public class AddActivity extends ActionBarActivity {
                 if(intent.getStringExtra("board").equals("main"))
                     parseObject.put("board","main");
                 else if(intent.getStringExtra("board").equals("sub")){
-                    parseObject.put("board","main");
+                    parseObject.put("board","sub");
                     parseObject.put("main_title",intent.getStringExtra("main_title"));
                 }
                 parseObject.saveInBackground();

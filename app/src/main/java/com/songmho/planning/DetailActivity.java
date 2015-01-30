@@ -36,6 +36,7 @@ public class DetailActivity extends ActionBarActivity {
         String classname=pref_login.getString("classname","");
 
         final TextView duedate=(TextView)findViewById(R.id.duedate);
+        final TextView duetime=(TextView)findViewById(R.id.duetime);
         RadioButton radio_todo=(RadioButton)findViewById(R.id.radio_todo);
         RadioButton radio_doing=(RadioButton)findViewById(R.id.radio_doing);
         RadioButton radio_done=(RadioButton)findViewById(R.id.radio_done);
@@ -48,6 +49,7 @@ public class DetailActivity extends ActionBarActivity {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ParseObject object=parseObjects.get(0);
                 duedate.setText(object.getString("duedate"));
+                duetime.setText(object.getString("duetime"));
             }
         });
 
