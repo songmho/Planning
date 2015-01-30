@@ -43,9 +43,9 @@ public class Viewpager_Adapter extends FragmentPagerAdapter {
             Bundle bundle=new Bundle();
             if(position==0){
                 bundle.putString("title",main_title);
-                DetailfragmentActivity detailfragmentActivity =new DetailfragmentActivity();
-                detailfragmentActivity.setArguments(bundle);
-                return detailfragmentActivity;
+                SubFstFragmentAcitvity detailFragmentActivity =new SubFstFragmentAcitvity();
+                detailFragmentActivity.setArguments(bundle);
+                return detailFragmentActivity;
             }
             else{
                 bundle.putInt("max_page",position-1);
