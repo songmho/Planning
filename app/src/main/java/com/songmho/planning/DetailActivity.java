@@ -7,6 +7,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -22,6 +24,9 @@ import java.util.List;
  */
 public class DetailActivity extends ActionBarActivity {
     String main_title;
+    ImageButton fix;
+    String duedate_str;
+    String duetime_str;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,13 @@ public class DetailActivity extends ActionBarActivity {
         RadioButton radio_todo=(RadioButton)findViewById(R.id.radio_todo);
         RadioButton radio_doing=(RadioButton)findViewById(R.id.radio_doing);
         RadioButton radio_done=(RadioButton)findViewById(R.id.radio_done);
+        fix=(ImageButton)findViewById(R.id.fix);
+        fix.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFix();
+            }
+        });
 
         find_state(intent,radio_todo,radio_doing,radio_done);
         ParseQuery<ParseObject> query= new ParseQuery<>(classname);
@@ -50,6 +62,8 @@ public class DetailActivity extends ActionBarActivity {
                 ParseObject object=parseObjects.get(0);
                 duedate.setText(object.getString("duedate"));
                 duetime.setText(object.getString("duetime"));
+                duedate_str=object.getString("duedate");
+                duetime_str=object.getString("duetime");
             }
         });
 
@@ -80,5 +94,15 @@ public class DetailActivity extends ActionBarActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openFix() {
+        Intent intent=new Intent(DetailActivity.this, AddnFixActivity.class);
+        intent.putExtra("button","fix");
+        intent.putExtra("board","sub");
+        intent.putExtra("main_title",main_title);
+        intent.putExtra("date",duedate_str);
+        intent.putExtra("time",duetime_str);
+        startActivity(intent);
     }
 }
