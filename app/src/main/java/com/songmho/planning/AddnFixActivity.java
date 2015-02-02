@@ -125,8 +125,11 @@ public class AddnFixActivity extends ActionBarActivity {
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 ParseObject object=parseObjects.get(0);
                 object.put("title",String.valueOf(edit_title.getText()));
-                if(isDateinput)
-                    object.put("duedate", String.valueOf(year[1]) + "." + String.valueOf(mon[1]) + "." + String.valueOf(day[1]));
+                if(isDateinput) {
+                    object.put("duedate_year",String.valueOf(year[1]));
+                    object.put("duedate_mon",String.valueOf(mon[1]));
+                    object.put("duedate_day",String.valueOf(day[1]));
+                }
                 if(isTimeinput)
                     object.put("duetime", String.valueOf(hour[1]) + ":" + String.valueOf(min[1]));
                 object.saveInBackground();
@@ -141,9 +144,18 @@ public class AddnFixActivity extends ActionBarActivity {
         ParseObject parseObject=new ParseObject(classname);
         parseObject.put("title",String.valueOf(edit_title.getText()));
         if(isDateinput && isTimeinput) {
-            parseObject.put("duedate", String.valueOf(year[1]) + "." + String.valueOf(mon[1]) + "." + String.valueOf(day[1]));
+            parseObject.put("duedate_year",String.valueOf(year[1]));
+            parseObject.put("duedate_mon",String.valueOf(mon[1]));
+            parseObject.put("duedate_day",String.valueOf(day[1]));
             parseObject.put("duetime", String.valueOf(hour[1]) + ":" + String.valueOf(min[1]));
         }
+        else{
+            parseObject.put("duedate_year"," ");
+            parseObject.put("duedate_mon"," ");
+            parseObject.put("duedate_day"," ");
+            parseObject.put("duetime", " " + ":" +" ");
+        }
+
 
         parseObject.put("state",intent.getStringExtra("state"));
         parseObject.put("username", ParseUser.getCurrentUser().get("name"));

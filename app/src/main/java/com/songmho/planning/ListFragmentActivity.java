@@ -157,7 +157,8 @@ public class ListFragmentActivity extends Fragment {
                     return;
                 for (int i = 0; i < parseObjects.size(); i++) {
                     ParseObject parseObject = parseObjects.get(i);
-                    item1[i] = new Listitem(parseObject.getString("title"),parseObject.getString("duedate"),parseObject.getString("duetime"));
+                    String duedate=parseObject.getString("duedate_year")+"."+parseObject.getString("duedate_mon")+"."+parseObject.getString("duedate_day");
+                    item1[i] = new Listitem(parseObject.getString("title"),duedate,parseObject.getString("duetime"));
                     items.add(item1[i]);
                 }
                     make_list(list, items);
