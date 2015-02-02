@@ -51,10 +51,12 @@ public class ListAdapter extends BaseAdapter{
         TextView title=(TextView)convertView.findViewById(R.id.title);
         TextView duedate=(TextView)convertView.findViewById(R.id.duedate);
         TextView duetime=(TextView)convertView.findViewById(R.id.duetime);
+        TextView burndown=(TextView)convertView.findViewById(R.id.burndown);
 
         title.setText(listitem.getTitle());
         duedate.setText(listitem.getDuedate());
         duetime.setText(listitem.getDuetime());
+        burndown.setText(String.valueOf(listitem.getBurndown()));
 
         String _duedate = listitem.getDuedate();
         if(!_duedate.equals(" . . ")) {

@@ -103,7 +103,7 @@ public class ListFragmentActivity extends Fragment {
             Intent intent;
                 intent=new Intent(getActivity(),DetailActivity.class);
             if(cur_bor.equals("main")) {
-                intent = new Intent(getActivity(), DetailActivity.class);
+                intent = new Intent(getActivity(), SubActivity.class);
                 intent.putExtra("par_board",String.valueOf(parent.getItemAtPosition(position)));
             }
             switch (cur_position){
@@ -150,6 +150,8 @@ public class ListFragmentActivity extends Fragment {
                 query.whereContains("state", "done");
                 break;
         }
+        query.addDescendingOrder("burndown");
+        query.orderByDescending("burndown");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
@@ -158,7 +160,7 @@ public class ListFragmentActivity extends Fragment {
                 for (int i = 0; i < parseObjects.size(); i++) {
                     ParseObject parseObject = parseObjects.get(i);
                     String duedate=parseObject.getString("duedate_year")+"."+parseObject.getString("duedate_mon")+"."+parseObject.getString("duedate_day");
-                    item1[i] = new Listitem(parseObject.getString("title"),duedate,parseObject.getString("duetime"));
+                    item1[i] = new Listitem(parseObject.getString("title"),duedate,parseObject.getString("duetime"),parseObject.getDouble("burndown"));
                     items.add(item1[i]);
                 }
                     make_list(list, items);

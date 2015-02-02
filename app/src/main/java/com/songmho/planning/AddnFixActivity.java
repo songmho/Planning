@@ -10,9 +10,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ public class AddnFixActivity extends ActionBarActivity {
     Intent intent;
     Boolean isDateinput=false;
     Boolean isTimeinput=false;
+    Spinner spi_burndown;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,7 @@ public class AddnFixActivity extends ActionBarActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffff7300));
 
         final EditText edit_title=(EditText)findViewById(R.id.edit_title);
+        spi_burndown=(Spinner)findViewById(R.id.burndown_spi);
         final TextView text_date=(TextView)findViewById(R.id.text_date);
         final TextView text_time=(TextView)findViewById(R.id.text_time);
 
@@ -52,6 +58,9 @@ public class AddnFixActivity extends ActionBarActivity {
         Button bt_time=(Button)findViewById(R.id.bt_time);
         Button bt_add=(Button)findViewById(R.id.bt_add);
 
+        final ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.burndown,android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spi_burndown.setAdapter(adapter);
         SharedPreferences pref_login=getSharedPreferences("login_info", Context.MODE_PRIVATE);
         classname=pref_login.getString("classname","");
 
@@ -132,6 +141,7 @@ public class AddnFixActivity extends ActionBarActivity {
                 }
                 if(isTimeinput)
                     object.put("duetime", String.valueOf(hour[1]) + ":" + String.valueOf(min[1]));
+                object.put("burndown",Double.valueOf(String.valueOf(spi_burndown.getSelectedItem())));
                 object.saveInBackground();
                 Toast.makeText(getApplicationContext(), "fixed it.", Toast.LENGTH_SHORT).show();
                 finish();
@@ -148,6 +158,7 @@ public class AddnFixActivity extends ActionBarActivity {
             parseObject.put("duedate_mon",String.valueOf(mon[1]));
             parseObject.put("duedate_day",String.valueOf(day[1]));
             parseObject.put("duetime", String.valueOf(hour[1]) + ":" + String.valueOf(min[1]));
+            parseObject.put("burndown",Double.valueOf(String.valueOf(spi_burndown.getSelectedItem())));
         }
         else{
             parseObject.put("duedate_year"," ");
