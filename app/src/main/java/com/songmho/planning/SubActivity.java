@@ -20,6 +20,7 @@ public class SubActivity extends ActionBarActivity {
 
     String main_title;
     String classname;
+    String par_board;
 
     ViewPager sub_viewPager;
     Button info;
@@ -33,6 +34,7 @@ public class SubActivity extends ActionBarActivity {
 
         Intent intent_get=getIntent();
         main_title=intent_get.getStringExtra("title");
+        par_board=intent_get.getStringExtra("par_board");
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xffFF7300));
         getSupportActionBar().setTitle(main_title);

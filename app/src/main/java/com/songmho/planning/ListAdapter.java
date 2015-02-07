@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class ListAdapter extends BaseAdapter{
         TextView duedate=(TextView)convertView.findViewById(R.id.duedate);
         TextView duetime=(TextView)convertView.findViewById(R.id.duetime);
         TextView burndown=(TextView)convertView.findViewById(R.id.burndown);
+        LinearLayout duebox=(LinearLayout)convertView.findViewById(R.id.duebox);
 
         title.setText(listitem.getTitle());
         duedate.setText(listitem.getDuedate());
@@ -67,29 +69,18 @@ public class ListAdapter extends BaseAdapter{
 
             Calendar calendar = Calendar.getInstance();
 
-            if(year<calendar.get(calendar.YEAR))                            //현재 년도가 저장된 년도보다 작을 때
-                convertView.setBackground(new ColorDrawable(0xffED174F));   //red
-            else if(year>=calendar.get(calendar.YEAR)){                     //현재 년도가 저장된 년도와 같거나 클 때
-                if(mon<calendar.get(calendar.MONTH))                        //현재 월이 저장된 월보다 작을 때
-                    convertView.setBackground(new ColorDrawable(0xffED174F));   //red
+            if(year<calendar.get(Calendar.YEAR))                            //현재 년도가 저장된 년도보다 작을 때
+                duebox.setBackground(new ColorDrawable(0xffED174F));   //red
+            else if(year>=calendar.get(Calendar.YEAR)){                     //현재 년도가 저장된 년도와 같거나 클 때
+                if(mon<calendar.get(Calendar.MONTH))                        //현재 월이 저장된 월보다 작을 때
+                    duebox.setBackground(new ColorDrawable(0xffED174F));   //red
                 else if(mon>=calendar.get(calendar.MONTH)){                 //같거나 클 때
-                    if(day<calendar.get(calendar.DATE))                         //현재 일이 저장된 년도보다 작을 때
-                        convertView.setBackground(new ColorDrawable(0xffED174F));   //red
-
-                    else if(day==calendar.get(calendar.DATE))                   //같거나 클 때때
-                       convertView.setBackground(new ColorDrawable(0xffFFC423));   //yellow
+                    if(day<calendar.get(Calendar.DATE))                         //현재 일이 저장된 년도보다 작을 때
+                        duebox.setBackground(new ColorDrawable(0xffED174F));   //red
+                    else if(day==calendar.get(Calendar.DATE))                   //같거나 클 때때
+                        duebox.setBackground(new ColorDrawable(0xffFFC423));   //yellow
                 }
             }
-
-           /* if (year == calendar.get(calendar.YEAR)) {
-                if (mon == calendar.get(calendar.MONTH) + 1) {
-                    if (calendar.get(calendar.DAY_OF_MONTH)>=day && calendar.get(calendar.DAY_OF_MONTH)<day+3)
-                        convertView.setBackground(new ColorDrawable(0xffFFC423));   //yellow
-                    else if (calendar.get(calendar.DAY_OF_MONTH)<day)
-                        convertView.setBackground(new ColorDrawable(0xffED174F));   //red
-                }
-            }*/
-
         }
 
         return convertView;

@@ -71,6 +71,7 @@ public class ListFragmentActivity extends Fragment {
            intent.putExtra("board","main");
         else if(cur_bor.equals("sub")){
             intent.putExtra("board","sub");
+            intent.putExtra("par_board",getArguments().getString("par_board"));
             intent.putExtra("main_title",getArguments().getString("main_title"));
         }
         switch (cur_position) {
@@ -85,6 +86,48 @@ public class ListFragmentActivity extends Fragment {
                 break;
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(items!=null)
+            items.clear();
+        ParseQuery<ParseObject> query=new ParseQuery<>(classname);
+        query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
+        if(cur_bor.equals("main"))
+            query.whereContains("board","main");
+        else if(cur_bor.equals("sub")) {
+            query.whereContains("main_title",getArguments().getString("main_title"));
+            query.whereContains("board", "sub");
+        }
+        switch(cur_position){
+            case 0:
+                query.whereContains("state", "todo");
+                break;
+            case 1:
+                query.whereContains("state", "doing");
+                break;
+            case 2:
+                query.whereContains("state", "done");
+                break;
+        }
+        query.addDescendingOrder("burndown");
+        query.orderByDescending("burndown");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(parseObjects==null)
+                    return;
+                for (int i = 0; i < parseObjects.size(); i++) {
+                    ParseObject parseObject = parseObjects.get(i);
+                    String duedate=parseObject.getString("duedate_year")+"."+parseObject.getString("duedate_mon")+"."+parseObject.getString("duedate_day");
+                    item1[i] = new Listitem(parseObject.getString("title"),duedate,parseObject.getString("duetime"),parseObject.getDouble("burndown"));
+                    items.add(item1[i]);
+                }
+                make_list(list, items);
+            }
+        });
     }
 
     private void make_list(ListView list, ArrayList<Listitem> items) {      //ArrayList를 가지고 list를 만드는 메소드
@@ -126,70 +169,47 @@ public class ListFragmentActivity extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(items!=null)
-        items.clear();
-        ParseQuery<ParseObject> query=new ParseQuery<>(classname);
-        query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
-        if(cur_bor.equals("main"))
-            query.whereContains("board","main");
-        else if(cur_bor.equals("sub")) {
-            query.whereContains("main_title",getArguments().getString("main_title"));
-            query.whereContains("board", "sub");
-        }
-        switch(cur_position){
-            case 0:
-                query.whereContains("state", "todo");
-                break;
-            case 1:
-                query.whereContains("state", "doing");
-                break;
-            case 2:
-                query.whereContains("state", "done");
-                break;
-        }
-        query.addDescendingOrder("burndown");
-        query.orderByDescending("burndown");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if(parseObjects==null)
-                    return;
-                for (int i = 0; i < parseObjects.size(); i++) {
-                    ParseObject parseObject = parseObjects.get(i);
-                    String duedate=parseObject.getString("duedate_year")+"."+parseObject.getString("duedate_mon")+"."+parseObject.getString("duedate_day");
-                    item1[i] = new Listitem(parseObject.getString("title"),duedate,parseObject.getString("duetime"),parseObject.getDouble("burndown"));
-                    items.add(item1[i]);
-                }
-                    make_list(list, items);
-            }
-        });
-    }
-
-
     private class ListLongclick implements AdapterView.OnItemLongClickListener {
         int cur_position;
         public ListLongclick(int cur_position) {
             this.cur_position=cur_position;
         }
         @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
             final AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
             builder.setMessage("Do you want delete it?").setCancelable(false)
-                    .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ParseQuery<ParseObject> query=new ParseQuery<>(classname);
+
+                            if (cur_bor.equals("main")) {                                               //메인의 리스트를 지울 때 하위 목록도 지우는 부분
+                                ParseQuery<ParseObject> query1 = new ParseQuery<>(classname);
+                                query1.whereContains("username", ParseUser.getCurrentUser().getString("name"));
+                                query1.whereContains("main_title",String.valueOf(parent.getItemAtPosition(position)));
+                                query1.whereContains("board", "sub");
+                                query1.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> parseObjects, ParseException e) {
+                                        for (ParseObject o : parseObjects) {
+                                            try {
+                                                o.delete();
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            ParseQuery<ParseObject> query = new ParseQuery<>(classname);
                             query.whereContains("username", ParseUser.getCurrentUser().getString("name"));
-                            if(cur_bor.equals("main"))
-                                query.whereContains("board","main");
-                            else if(cur_bor.equals("sub")) {
-                                query.whereContains("main_title",getArguments().getString("main_title"));
+                            query.whereContains("title",String.valueOf(parent.getItemAtPosition(position)));
+                            if (cur_bor.equals("main")) {
+                                query.whereContains("board", "main");
+                            } else if (cur_bor.equals("sub")) {
+                                query.whereContains("main_title", getArguments().getString("main_title"));
                                 query.whereContains("board", "sub");
                             }
-                            switch(cur_position){
+                            switch (cur_position) {
                                 case 0:
                                     query.whereContains("state", "todo");
                                     break;
@@ -203,19 +223,20 @@ public class ListFragmentActivity extends Fragment {
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
                                 public void done(List<ParseObject> parseObjects, ParseException e) {
-                                    ParseObject object=parseObjects.get(position);
+                                    ParseObject object = parseObjects.get(0);
                                     try {
                                         object.delete();
                                     } catch (ParseException e1) {
                                         e1.printStackTrace();
                                     }
                                     object.saveInBackground();
-                                    Toast.makeText(getActivity().getApplicationContext(),"deleted it.",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity().getApplicationContext(), "deleted it.", Toast.LENGTH_SHORT).show();
                                     onResume();
                                 }
                             });
+
                         }
-                    }).setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

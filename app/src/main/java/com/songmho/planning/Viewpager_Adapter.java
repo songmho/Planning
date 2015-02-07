@@ -13,6 +13,7 @@ public class Viewpager_Adapter extends FragmentPagerAdapter {
     String cur_bor;
     String main_title;
     String classname;
+
     public Viewpager_Adapter(FragmentManager supportFragmentManager, int MAX_PAGE, String cur_bor,String classname) {
         super(supportFragmentManager);
         this.PAGE=MAX_PAGE;
@@ -32,6 +33,7 @@ public class Viewpager_Adapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if(cur_bor.equals("main")){
         Bundle bundle=new Bundle();
+        bundle.putString("main_title",main_title);
         bundle.putInt("max_page",position);
         bundle.putString("cur_bor",cur_bor);
         bundle.putString("classname",classname);

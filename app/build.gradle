@@ -8,8 +8,8 @@ android {
         applicationId "com.songmho.planning"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 12
-        versionName "0.90"
+        versionCode 13
+        versionName "0.93"
     }
     signingConfigs{
         release{
